@@ -1,7 +1,9 @@
 from helper.database_loader import load_database
 from flask import Flask, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
-from config import DB_HOST, DB_USER, DB_PASS, DATABASE
+from config import DB_HOST, DB_USER, DB_PASS, DATABASE, SECRET_KEY
+from werkzeug.middleware.proxy_fix import ProxyFix
+from flask_cors import CORS
 
 
 app = Flask(__name__)
@@ -13,6 +15,7 @@ database = DATABASE
     
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{user}:{password}@{host}/{database}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config["SECRET_KEY"] = SECRET_KEY
 
 from helper.database_init import db
 db.init_app(app)
@@ -20,8 +23,14 @@ db.init_app(app)
 from helper.models import User
 
 with app.app_context():
+    load_database()
     db.create_all()
 
-if __name__ == "__main__":
-    load_database()
-    print("Connected")
+from routes.auth import auth_bp, discord
+
+app.register_blueprint(auth_bp, url_prefix="/auth") 
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
+
+CORS(app, supports_credentials=True)
+if __name__ == "__main__": 
+    app.run(debug=True)

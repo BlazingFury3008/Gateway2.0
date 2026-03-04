@@ -10,3 +10,18 @@ class User(db.Model):
 
     def __repr__(self):
         return f"<User {self.username}>"
+    
+class Session(db.Model):
+    __tablename__ = "sessions"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    session_token = db.Column(db.String(128), unique=True, nullable=False)
+    created_at = db.Column(db.DateTime, nullable=False)
+    last_active_at = db.Column(db.DateTime, nullable=False)
+    expire_time = db.Column(db.DateTime, nullable=False)
+
+    user = db.relationship("User", backref=db.backref("sessions", lazy=True))
+
+    def __repr__(self):
+        return f"<Session {self.session_token} for User ID {self.user_id}>"

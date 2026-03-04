@@ -29,3 +29,4 @@ def get_connection():
         database=DATABASE,
         cursorclass=pymysql.cursors.DictCursor,
     )
+    

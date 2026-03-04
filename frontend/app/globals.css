@@ -1,26 +1,60 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ---------- THEME VARIABLES ---------- */
+:root[data-theme="light"] {
+  --background: #f5f5f5;     /* Page background */
+  --foreground: #0f0f0f;     /* Text color */
+  --navbar: #ffffff;         /* Navbar background */
+  --primary: #2563eb;        /* Accent */
+  --secondary: #1e40af;      /* Accent darker */
+  --border: #e5e7eb;
+  --muted: #6b7280;          /* slightly darker than #9ca3af for readability on light */
+}
+
+:root[data-theme="dark"] {
+  --background: #0f0f0f;     /* Page background */
+  --foreground: #f5f5f5;     /* Text color */
+  --navbar: #0a0a0a;         /* Navbar background */
+  --primary: #2563eb;
+  --secondary: #1e40af;
+  --border: #2d2d2d;
+  --muted: #a3a3a3;          /* lighter muted for dark backgrounds */
+}
+
+/* Fallback: system preference ONLY if no data-theme is set */
+:root:not([data-theme]) {
+  --background: #f5f5f5;
+  --foreground: #0f0f0f;
+  --navbar: #ffffff;
+  --primary: #2563eb;
+  --secondary: #1e40af;
+  --border: #e5e7eb;
+  --muted: #6b7280;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --background: #0f0f0f;
+    --foreground: #f5f5f5;
+    --navbar: #0a0a0a;
+    --primary: #2563eb;
+    --secondary: #1e40af;
+    --border: #2d2d2d;
+    --muted: #a3a3a3;
+  }
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-navbar: var(--navbar);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
 }
