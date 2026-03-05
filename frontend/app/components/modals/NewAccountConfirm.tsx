@@ -7,10 +7,8 @@ export default function NewAccountConfirm({
   accountType: string | null;
 }) {
   const handleYes = () => {
-    alert(accountType)
     const redirectToPage = window.location.href.split("?")[0]; // remove any query params
     const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login/${accountType}?redirect=${redirectToPage}&create_user=true`;
-    alert(url)
     window.location.href = url;
   };
 

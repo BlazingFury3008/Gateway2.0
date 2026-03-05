@@ -62,18 +62,29 @@ export default function ProfileSection({ userData }: { userData: UserObject }) {
         <div
           ref={drawerRef}
           role="menu"
-          className="absolute top-12 right-0 w-90 bg-[var(--background)] border border-[var(--border)] rounded-lg p-4 shadow-lg z-50"
+          className="absolute top-16 right-0 w-45 bg-[var(--background)] border border-[var(--border)] rounded-lg p-4 shadow-lg z-50 space-y-3"
         >
           <button
             type="button"
+            onClick={() => {}}
+            className="w-full px-4 py-2 bg-[var(--primary)] text-white rounded cursor-pointer"
+            role="menuitem"
+          >
+            Profile
+          </button>
+                    <button
+            type="button"
             onClick={async () => {
-              await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/logout`, {
-                method: "POST",
-                credentials: "include",
-              });
+              await fetch(
+                `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/logout`,
+                {
+                  method: "POST",
+                  credentials: "include",
+                },
+              );
               window.location.reload();
             }}
-            className="w-full px-4 py-2 bg-gray-700 text-white rounded"
+            className="w-full px-4 py-2 bg-[var(--danger)] text-white rounded cursor-pointer"
             role="menuitem"
           >
             Logout

@@ -114,7 +114,7 @@ export default function AuthWindow() {
               {openDrawer && (
                 <div
                   ref={drawerRef}
-                  className="absolute top-12 right-0 w-90 bg-[var(--background)] border border-[var(--border)] rounded-lg p-4 shadow-lg"
+                  className="absolute top-16 right-0 w-90 bg-[var(--background)] border border-[var(--border)] rounded-lg p-4 shadow-lg"
                 >
                   <div className="flex gap-2 mb-3">
                     <div className="relative flex w-full border border-[var(--border)] rounded-lg overflow-hidden">

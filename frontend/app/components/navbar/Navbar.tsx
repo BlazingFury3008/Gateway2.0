@@ -31,36 +31,41 @@ export default function Navbar({ darkMode, toggleDarkMode }: NavbarProps) {
   }
 
   return (
-    <header className="bg-navbar border-b border-(--border) text-foreground">
-      <div className="container mx-auto flex items-center justify-between p-4">
+    <header className="bg-[var(--navbar)] text-[var(--foreground)] border-b border-[var(--border)]">
+      <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-3 md:px-6">
+        {/* Left: Logo */}
         <div
-          className="text-2xl font-bold cursor-pointer"
+          className="text-xl md:text-2xl font-bold cursor-pointer select-none"
           onClick={() => navigate("/")}
         >
           Gateway
         </div>
-        <nav className="hidden md:flex space-x-6">
+
+        {/* Center: Nav links */}
+        <nav className="hidden md:flex items-center gap-6">
           {NAV_ITEMS.map((item) => (
-            <a
+            <button
               key={item.Label}
               onClick={() => navigate(item.link)}
-              className="hover:text-primary cursor-pointer"
+              className="text-sm font-medium hover:text-[var(--primary)] transition-colors"
+              type="button"
             >
               {item.Label}
-            </a>
+            </button>
           ))}
         </nav>
-        <div className="flex items-center space-x-4">
+
+        {/* Right: Actions */}
+        <div className="flex items-center gap-3">
           <button
             onClick={toggleDarkMode}
-            className="w-10 h-10 flex items-center justify-center rounded-full border border-(--border) bg-background hover:bg-(--border) transition"
+            className="h-10 w-10 inline-flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--border)] transition"
+            type="button"
+            aria-label="Toggle theme"
           >
-            {darkMode ? (
-              <FaSun className="text-sm"  />
-            ) : (
-              <FaMoon className="text-sm" />
-            )}
+            {darkMode ? <FaSun className="text-sm" /> : <FaMoon className="text-sm" />}
           </button>
+
           <AuthWindow />
         </div>
       </div>
