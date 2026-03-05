@@ -11,19 +11,55 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  function handleSocialLogin(arg0: string): void {
-    throw new Error("Function not implemented.");
+  async function handleSocialLogin(provider: "google" | "discord") {
+      const redirectToPage = window.location.href;
+      const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login/${provider}?redirect=${redirectToPage}`;
+      window.location.href = url;
   }
 
-  function onLoginClick() {
-    
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
 
-}
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            email,
+            password,
+          }),
+        },
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Login failed.");
+        return;
+      }
+
+      // backend already set the session cookie
+      // refresh UI / reload session state
+      window.location.reload();
+    } catch (err) {
+      console.error(err);
+      setError("Network error. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <div className="flex flex-col gap-4">
       <form
-        onSubmit={(e) => e.preventDefault()}
+        onSubmit={handleSubmit}
         className="flex flex-col gap-3"
       >
         {/* Email */}
@@ -76,7 +112,7 @@ export default function Login() {
       <div className="flex flex-col gap-2">
         {" "}
         <button
-          onClick={() => handleSocialLogin("Google")}
+          onClick={() => handleSocialLogin("google")}
           className="flex items-center justify-center gap-2 bg-[#2f3cb5] hover:bg-[#2634b0] text-white rounded p-2 transition"
         >
           <FcGoogle size={20} />

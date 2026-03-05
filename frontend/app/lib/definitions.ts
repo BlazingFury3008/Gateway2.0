@@ -27,3 +27,11 @@ export type FormState =
       message?: string
     }
   | undefined
+
+
+export interface UserObject {
+  uuid: string;
+  username: string;
+  email: string;
+  image_url: string;
+}

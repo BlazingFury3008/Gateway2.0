@@ -39,7 +39,15 @@ export default function Home() {
       </button>
 
       <button
-        onClick={logout}
+        onClick={async () => {
+    await fetch(`${BACKEND}/auth/logout_token`, {
+      method: "POST",
+      credentials: "include",
+    });
+
+    // Optional: refresh page or redirect
+    window.location.reload();
+  }}
         className="px-4 py-2 bg-gray-700 text-white rounded"
       >
         Logout

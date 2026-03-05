@@ -1,1 +1,1 @@
-npm i && npm run dev
+npm i && cls && npm run dev

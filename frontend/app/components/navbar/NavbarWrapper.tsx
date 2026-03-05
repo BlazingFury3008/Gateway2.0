@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Navbar from "./Navbar";
+import { useSearchParams } from "next/navigation";
+import NewAccountConfirm from "../modals/NewAccountConfirm";
 
 export default function NavbarWrapper({
   children,
@@ -21,9 +23,17 @@ export default function NavbarWrapper({
     setDarkMode((prev) => !prev);
   };
 
+  const searchParams = useSearchParams();
+
+  const signupError = searchParams.get("error");
+  const accountType = searchParams.get("accountType");
+
   return (
     <>
       <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkTheme} />
+      {signupError && (
+        <NewAccountConfirm accountType={accountType} />
+      )}
       {children}
     </>
   );

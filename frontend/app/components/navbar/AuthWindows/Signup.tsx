@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { FaDiscord, FaEye, FaEyeSlash } from "react-icons/fa";
 
@@ -16,34 +16,59 @@ export default function Signup() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  function handleSocialLogin(provider: "google" | "discord") {
-    // TODO: implement OAuth start
-    console.log("Social signup:", provider);
+  async function handleSocialLogin(provider: "google" | "discord") {
+    const redirectToPage = window.location.href;
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login/${provider}?redirect=${redirectToPage}`;
+    window.location.href = url;
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+    setLoading(true);
 
     if (password.length < 8) {
       setError("Password must be at least 8 characters.");
+      setLoading(false);
       return;
     }
 
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
+      setLoading(false);
       return;
     }
 
     try {
-      setLoading(true);
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/register`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            username,
+            email,
+            password,
+          }),
+        },
+      );
 
-      // TODO: call your backend signup endpoint
-      // await fetch("/api/signup", { method: "POST", body: JSON.stringify({ email, username, password }) })
+      const data = await res.json();
 
-      console.log("Signup:", { email, username, password });
+      if (!res.ok) {
+        setError(data.error || "Registration failed.");
+        return;
+      }
+
+      // backend already set the session cookie
+      // refresh UI / reload session state
+      window.location.reload();
     } catch (err) {
-      setError("Signup failed. Please try again.");
+      console.error(err);
+      setError("Network error. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -108,14 +133,18 @@ export default function Signup() {
             type="button"
             onClick={() => setShowConfirm((v) => !v)}
             className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--muted)]"
-            aria-label={showConfirm ? "Hide confirm password" : "Show confirm password"}
+            aria-label={
+              showConfirm ? "Hide confirm password" : "Show confirm password"
+            }
           >
             {showConfirm ? <FaEyeSlash /> : <FaEye />}
           </button>
         </div>
 
         {error && (
-          <p className="text-red-500 text-sm font-medium text-center">{error}</p>
+          <p className="text-red-500 text-sm font-medium text-center">
+            {error}
+          </p>
         )}
 
         <button
