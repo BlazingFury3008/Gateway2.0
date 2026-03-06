@@ -382,6 +382,8 @@ def create_update_session(user):
             "username": user.username,
             "email": user.email,
             "image_url": user.image_url,
+            "discord_id": user.discord_id,
+            "google_id": user.google_id
         },
     }
 

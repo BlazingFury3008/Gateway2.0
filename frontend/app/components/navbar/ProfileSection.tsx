@@ -3,9 +3,11 @@
 import { UserObject } from "@/app/lib/definitions";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function ProfileSection({ userData }: { userData: UserObject }) {
   const [openDrawer, setOpenDrawer] = useState(false);
+  const router = useRouter()
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
@@ -47,8 +49,12 @@ export default function ProfileSection({ userData }: { userData: UserObject }) {
         aria-expanded={openDrawer}
       >
         <Image
-          src={userData.image_url}
-          alt={`${userData.username} avatar`}
+          src={
+            userData?.image_url?.trim()
+              ? userData.image_url
+              : `https://api.dicebear.com/7.x/identicon/png?seed=${userData?.username ?? "user"}`
+          }
+          alt={`${userData?.username ?? "User"} avatar`}
           width={40}
           height={40}
           className="rounded-full object-cover"
@@ -66,13 +72,15 @@ export default function ProfileSection({ userData }: { userData: UserObject }) {
         >
           <button
             type="button"
-            onClick={() => {}}
+            onClick={() => {
+              router.push("/profile")
+            }}
             className="w-full px-4 py-2 bg-[var(--primary)] text-white rounded cursor-pointer"
             role="menuitem"
           >
             Profile
           </button>
-                    <button
+          <button
             type="button"
             onClick={async () => {
               await fetch(

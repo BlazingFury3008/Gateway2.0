@@ -2,10 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import Login from "./AuthWindows/Login";
 import Signup from "./AuthWindows/Signup";
 import ProfileSection from "./ProfileSection";
-import { UserObject } from "@/app/lib/definitions";
+import { AuthState, UserObject } from "@/app/lib/definitions";
 
 
-type AuthState = "checking" | "guest" | "authed";
 
 export default function AuthWindow() {
   const [openDrawer, setOpenDrawer] = useState(false);

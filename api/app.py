@@ -29,4 +29,6 @@ app.register_blueprint(auth_bp, url_prefix="/auth")
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
 
 if __name__ == "__main__": 
+    import os
+    os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
     app.run(debug=True)
